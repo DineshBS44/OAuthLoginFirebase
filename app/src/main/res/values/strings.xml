@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">OAuth Login Firebase</string>
+    <string name="default_web_client_id_1" translatable="false">511753561196-dhvnauuv3s1s0kr7p8kgjj2r5cvq1ca8.apps.googleusercontent.com</string>
 </resources>
