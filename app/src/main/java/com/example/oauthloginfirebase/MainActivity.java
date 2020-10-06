@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -27,6 +28,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class MainActivity extends AppCompatActivity {
     private SignInButton signInButton;
+    private TextView userName, userEmail;
     private GoogleSignInClient mGoogleSignInClient;
     private  String TAG = "MainActivity";
     private FirebaseAuth mAuth;
@@ -42,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
         signInButton = findViewById(R.id.sign_in_button);
         mAuth = FirebaseAuth.getInstance();
         btnSignOut = findViewById(R.id.sign_out_button);
+        btnSignOut.setVisibility(View.INVISIBLE);
+
+        userName=findViewById(R.id.name);
+        userEmail=findViewById(R.id.email);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -63,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
                 mGoogleSignInClient.signOut();
                 Toast.makeText(MainActivity.this,"You are Logged Out",Toast.LENGTH_SHORT).show();
                 btnSignOut.setVisibility(View.INVISIBLE);
+                userName.setVisibility(View.INVISIBLE);
+                userEmail.setVisibility(View.INVISIBLE);
+                signInButton.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -119,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void updateUI(FirebaseUser fUser){
         btnSignOut.setVisibility(View.VISIBLE);
+        signInButton.setVisibility(View.INVISIBLE);
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
         if(account !=  null){
             String personName = account.getDisplayName();
@@ -128,7 +138,17 @@ public class MainActivity extends AppCompatActivity {
             String personId = account.getId();
             Uri personPhoto = account.getPhotoUrl();
 
-            Toast.makeText(MainActivity.this,personName + " " + personEmail ,Toast.LENGTH_SHORT).show();
+            userName.setText("Hello, "+personName+"!");
+            userEmail.setText("Email ID is \n"+personEmail);
+            userName.setVisibility(View.VISIBLE);
+            userEmail.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            btnSignOut.setVisibility(View.INVISIBLE);
+            signInButton.setVisibility(View.VISIBLE);
+            userName.setVisibility(View.INVISIBLE);
+            userEmail.setVisibility(View.INVISIBLE);
         }
 
     }
